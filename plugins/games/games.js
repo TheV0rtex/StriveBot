@@ -29,14 +29,15 @@ exports["roll"] = {
         var dice = parseFloat(args[0]);
         if (args.length != 2) return;
 
-        var dice = parseInt(args[0]);
         var sides = parseInt(args[1]);
 
         if (isNaN(dice) || isNaN(sides)) return;
         if (dice < 1 || sides < 1) return;
 
-        var total = Math.floor(dice * ((Math.random() * sides) + 1));
-        if (total > Math.floor(dice * sides)) total = Math.floor(dice * sides);
+        var total = 0;
+        for (var i = 0; i < dice; i++) {
+            total += Math.floor((Math.random() * sides) + 1);
+        }
 
         message.channel.send("Rolled **"+ dice +"** "+ sides +"-sided dice and got **"+ total +"**.")
         .then(m => m.delete(5000))

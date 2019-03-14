@@ -81,8 +81,8 @@ exports["epoll"] = {
 
             message.channel.send({embed})
             .then(async function (msg) {
-                msg.react("🇦");
-                msg.react("🇧");
+                await msg.react("🇦");
+                await msg.react("🇧");
                 if (arg[4] != undefined) await msg.react("🇨");
                 if (arg[5] != undefined) await msg.react("🇩");
                 if (arg[6] != undefined) await msg.react("🇪");
