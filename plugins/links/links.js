@@ -77,7 +77,7 @@ exports["link"] = {
 }
 
 exports["lmgtfy"] = {
-    usage: "Let Quiet google that for you.",
+    usage: "Let "+ client.user.username +" google that for you.",
     needsAuth: false,
     process: function(message, args, config) {
         message.delete(0);
