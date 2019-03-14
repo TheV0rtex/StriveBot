@@ -19,7 +19,6 @@ exports.commands = [
     "getavatar",
     "joined",
     "members",
-    "memberlist",
     "rules"
 ]
 
@@ -123,23 +122,6 @@ exports["members"] = {
         message.delete(0);
 
         message.channel.send("There are currently **"+ message.guild.memberCount +"** members on this server.").catch(console.error);
-    }
-}
-
-exports["memberlist"] = {
-    usage: "Sends a list of members on the server with set roles.",
-    needsAuth: true,
-    process: function(message, config) {
-        message.delete(0);
-
-        var modRole = message.guild.roles.find("name", "Mod"); // to be extended
-        var youtuberRole = message.guild.roles.find("name", "YouTuber");
-        var streamerRole = message.guild.roles.find("name", "Streamer");
-
-        message.channel.send("There are currently **"+ message.guild.memberCount +"** members on this server:\n"+
-                              "**Moderators**: "+ modRole.members.keyArray().length +"\n"+
-                              "**YouTubers**: "+ youtuberRole.members.keyArray().length +"\n"+
-                              "**Streamers**: "+ streamerRole.members.keyArray().length).catch(console.error);
     }
 }
 

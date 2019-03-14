@@ -41,13 +41,13 @@ exports["setstream"] = {
     }
 }
 
-exports["setnickname"] = {
+exports["setnick"] = {
     usage: "Sets the bot's nickname.",
     needsAuth: true,
     process: function(message, args, config) {
         message.delete(0);
 
-        var msgcontent = message.content.substring(config.prefix.length + 11);
+        var msgcontent = message.content.substring(config.prefix.length + 7);
         message.guild.member(client.user).setNickname(msgcontent).catch(console.error);
 
         message.channel.send("My nickname is now `"+ msgcontent +"`.").then(m => m.delete(5000));
