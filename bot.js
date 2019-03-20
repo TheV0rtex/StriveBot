@@ -39,6 +39,7 @@ client.on('ready', () => {
 
     if (config.sendRules == false) console.log("> Rules will not be sent to new members.");
     if (config.sendWelcome == false) console.log("> Greetings will not be sent to new members.");
+    if (config.blockInvites == true) console.log("> Invites will be blocked.");
 
     if (config.sendLinks == false) console.log("> The \""+ config.prefix +"link\" command is disabled.");
     if (config.sendRules == false) console.log("> The \""+ config.prefix +"rules\" command is disabled.");
@@ -55,12 +56,17 @@ client.on('message', async message => {
         return;
     }
 
+    var authorised = message.member.roles.some(r => config.authorisedRoles.includes(r.name));
+
+    if ((message.content.includes("discordapp.com/invite/") || message.content.includes("discord.gg/")) && !authorised) {
+        message.delete(0);
+        return;
+    }
+
     if (message.author.bot || !message.content.startsWith(config.prefix)) return; // if message doesn't start with $, abort
 
     var args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     var command = args.shift().toLowerCase();
-
-    var authorised = message.member.roles.some(r => config.authorisedRoles.includes(r.name));
 
     for (var i = 0; i < commands.length; i++) {
         if (commands[i].toLowerCase() == command.toLowerCase()) {
