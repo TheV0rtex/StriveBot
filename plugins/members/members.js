@@ -18,6 +18,7 @@ exports.commands = [
     "avatar",
     "getavatar",
     "joined",
+    "getjoined",
     "members",
     "rules"
 ]
@@ -110,7 +111,39 @@ exports["joined"] = {
 
                 end += mins.toString() + " (UTC)"
 
-                message.reply("you joined on " + end)
+                message.reply("you joined on " + end + ".")
+            }).catch(console.error);
+    }
+}
+
+exports["getjoined"] = {
+    usage: "Sends for how long the targetted user has been on the server.",
+    needsAuth: true,
+    process: function(message, args) {
+        message.delete(0);
+
+        if (message.mentions.members.first() == null) {
+            message.reply("no user was mentionned.").then(m => m.delete(5000));
+            return;
+        }
+
+        var member = message.channel.guild.fetchMember(message.mentions.members.first())
+            .then(member => {
+                var date = member.joinedAt;
+
+                var year = date.getUTCFullYear();
+                var month = date.getUTCMonth() + 1;
+                var day = date.getUTCDate();
+                var hours = date.getUTCHours();
+                var mins = date.getUTCMinutes();
+
+                var end = "**" + day.toString() + "/" + month.toString() + "/" + year.toString() + "** at " + hours.toString() + ":";
+
+                if (mins.toString().length == 1) end += "0";
+
+                end += mins.toString() + " (UTC)"
+
+                message.channel.send("**" + message.mentions.members.first().user.username + "** joined on " + end + ".")
             }).catch(console.error);
     }
 }

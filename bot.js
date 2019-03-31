@@ -28,7 +28,7 @@ client.on('error', (err) => console.error(err));
 
 client.on('ready', () => {
     for (var i = 0; i < plugins.length; i++) {
-        var plugin = require('./plugins/'+ plugins[i]);
+        var plugin = require('./plugins/' + plugins[i]);
         plugin.init(client);
 
         for (var j = 0; j < plugin.commands.length; j++) {
@@ -41,13 +41,13 @@ client.on('ready', () => {
     if (config.sendWelcome == false) console.log("> Greetings will not be sent to new members.");
     if (config.blockInvites == true) console.log("> Invites will be blocked.");
 
-    if (config.sendLinks == false) console.log("> The \""+ config.prefix +"link\" command is disabled.");
-    if (config.sendRules == false) console.log("> The \""+ config.prefix +"rules\" command is disabled.");
+    if (config.sendLinks == false) console.log("> The \"" + config.prefix + "link\" command is disabled.");
+    if (config.sendRules == false) console.log("> The \"" + config.prefix + "rules\" command is disabled.");
 
-    console.log(client.user.username +" v"+ package.version +" online.");
+    console.log(client.user.username + " v" + package.version + " online.");
 
     client.user.setStatus("online"); //online, idle, dnd, invisible
-    client.user.setPresence({game:{name:config.prefix +"help | v"+ package.version, type:0}});
+    client.user.setPresence({game:{name:config.prefix + "help | v" + package.version, type:0}});
 });
 
 client.on('message', async message => {
@@ -58,9 +58,11 @@ client.on('message', async message => {
 
     var authorised = message.member.roles.some(r => config.authorisedRoles.includes(r.name));
 
-    if ((message.content.includes("discordapp.com/invite/") || message.content.includes("discord.gg/")) && !authorised) {
-        message.delete(0);
-        return;
+    if (config.blockInvites == true) {
+        if ((message.content.includes("discordapp.com/invite/") || message.content.includes("discord.gg/")) && !authorised) {
+            message.delete(0);
+            return;
+        }
     }
 
     if (message.author.bot || !message.content.startsWith(config.prefix)) return; // if message doesn't start with $, abort
@@ -82,17 +84,17 @@ client.on('message', async message => {
     if (message.author.id === config.ownerID) {
         if (command === 'ping') { // $ping
             message.delete(0); // Automatically deletes the author's message.
-            message.channel.send("Latency of **"+ Math.round(client.ping) +"** ms.").then(m => m.delete(2000)); // Checks ping
+            message.channel.send("Latency of **" + Math.round(client.ping) + "** ms.").then(m => m.delete(2000)); // Checks ping
         }
 
         if (command === '!stop') { // $!stop
-            console.log(client.user.username +" has been deactivated."); // Output in console
+            console.log(client.user.username + " has been deactivated."); // Output in console
             process.exit(1); // Stop the bot, for real.
         }
 
         if (command === 'version') { // $version
             message.delete(0);
-            message.channel.send("I am currently on version **"+ package.version +"**.").catch(console.error);
+            message.channel.send(client.user.username + " currently runs on version **" + package.version + "**.").catch(console.error);
         }
     }
 
@@ -164,15 +166,15 @@ client.on('message', async message => {
         var ownerResult = "";
         if (message.author.id === config.ownerID) {
             ownerResult = "**Owner**\n"+
-                          "`"+ config.prefix +"ping` - Checks the bot's latency.\n"+
-                          "`"+ config.prefix +"version` - Sends what version the bot is running.\n"+
-                          "`"+ config.prefix +"!stop` - Stops the bot.";
+                          "`"+ config.prefix + "ping` - Checks the bot's latency.\n"+
+                          "`"+ config.prefix + "version` - Sends what version the bot is running.\n"+
+                          "`"+ config.prefix + "!stop` - Stops the bot.";
         }
 
         var embed = new Discord.RichEmbed()
             .setColor(config.embedColor)
-            .setTitle(client.user.username +" Commands")
-            .setDescription("`"+ config.prefix +"help` - Sends the user a list of the available commands.\n\n"+ result + ownerResult)
+            .setTitle(client.user.username + " Commands")
+            .setDescription("`" + config.prefix + "help` - Sends the user a list of the available commands.\n\n" + result + ownerResult)
             .setThumbnail(client.user.avatarURL)
             .setFooter("For additional help, contact TheV0rtex#4553")
             .setTimestamp();
