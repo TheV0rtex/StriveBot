@@ -9,4 +9,5 @@ plugins/links/links.json
 plugins/members/rules.md
 plugins/members/welcome.md
 
+bloxel_*
 *.bat
