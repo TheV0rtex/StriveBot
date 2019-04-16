@@ -5,6 +5,7 @@ var Discord = require("discord.js");
 exports.commands = [
     "kick",
     "ban",
+    "cleanban",
     "purge",
     "mute",
     "unmute",
@@ -52,6 +53,47 @@ exports["kick"] = {
 
 exports["ban"] = {
     usage: "Bans the targeted user from the server.",
+    needsAuth: true,
+    process: function(message, args, config) {
+        message.delete(0);
+
+        var target = message.mentions.members.first();
+        var authorised = message.member.roles.some(r => config.authorisedRoles.includes(r.name));
+
+        if (target == null) {
+            message.reply("no user was mentionned.").then(m => m.delete(5000));
+            return;
+        }
+
+        if (!authorised || target.id === config.ownerID || target.id === client.user.id) {
+            message.reply("I am not allowed to kick this user.").then(m => m.delete(5000));
+            return;
+        }
+
+        target.ban(0).then((target) => {
+          message.channel.send(target +" has been banned.").then(m => m.delete(5000));
+
+          var logChannel = message.guild.channels.find("name", config.logChannelName);
+          if (!logChannel) return;
+
+          logChannel.bulkDelete(1, false).then(() => {
+              var target = message.mentions.members.first();
+
+              var embed = new Discord.RichEmbed()
+                  .setColor(config.banColor)
+                  .setAuthor("Member Banned", target.user.avatarURL)
+                  .setDescription(target.user +" | "+ target.user.tag +
+                                  "\nBanned by "+ message.author)
+                  .setTimestamp()
+
+              logChannel.send({embed}).catch(console.error);
+            });
+        });
+    }
+}
+
+exports["cleanban"] = {
+    usage: "Bans the targeted user from the server and deletes their last 24h of messages.",
     needsAuth: true,
     process: function(message, args, config) {
         message.delete(0);
