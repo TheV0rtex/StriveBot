@@ -186,8 +186,8 @@ exports["rules"] = {
 
 
 function memberAddEvent(member, config) {
-    var logChannel = member.guild.channels.find("name", config.logChannelName);
-    if (!logChannel) return;
+    var logMember = member.guild.channels.find("name", config.logMember);
+    if (!logMember) return;
 
     var embed = new Discord.RichEmbed()
         .setColor(config.joinColor)
@@ -196,7 +196,7 @@ function memberAddEvent(member, config) {
         .setFooter("Member no. "+ member.guild.memberCount)
         .setTimestamp()
 
-    logChannel.send({embed}).catch(console.error);
+    logMember.send({embed}).catch(console.error);
 
     if (config.sendWelcome == true) {
         if (fs.existsSync(welcomePath)) {
@@ -226,8 +226,8 @@ function memberAddEvent(member, config) {
 }
 
 function memberRemoveEvent(member, config) {
-    var logChannel = member.guild.channels.find("name", config.logChannelName);
-    if (!logChannel) return;
+    var logMember = member.guild.channels.find("name", config.logMember);
+    if (!logMember) return;
 
     var embed = new Discord.RichEmbed()
         .setColor(config.leaveColor)
@@ -235,7 +235,7 @@ function memberRemoveEvent(member, config) {
         .setDescription(member.user +" | "+ member.user.tag)
         .setTimestamp()
 
-    logChannel.send({embed}).catch(console.error);
+    logMember.send({embed}).catch(console.error);
 }
 
 } // no touchy

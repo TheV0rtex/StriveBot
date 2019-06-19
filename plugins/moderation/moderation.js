@@ -34,10 +34,10 @@ exports["kick"] = {
         target.kick().then((target) => {
             message.channel.send(target +" has been kicked.").then(m => m.delete(5000));
 
-            var logChannel = message.guild.channels.find("name", config.logChannelName);
-            if (!logChannel) return;
+            var logMember = message.guild.channels.find("name", config.logMember);
+            if (!logMember) return;
 
-            logChannel.bulkDelete(1, false).then(() => {
+            logMember.bulkDelete(1, false).then(() => {
                 var embed = new Discord.RichEmbed()
                     .setColor(config.kickColor)
                     .setAuthor("Member Kicked", target.user.avatarURL)
@@ -45,7 +45,7 @@ exports["kick"] = {
                                     "\nKicked by "+ message.author)
                     .setTimestamp()
 
-                logChannel.send({embed}).catch(console.error);
+                logMember.send({embed}).catch(console.error);
             });
         });
     }
@@ -73,10 +73,12 @@ exports["ban"] = {
         target.ban(0).then((target) => {
           message.channel.send(target +" has been banned.").then(m => m.delete(5000));
 
-          var logChannel = message.guild.channels.find("name", config.logChannelName);
-          if (!logChannel) return;
+          logMember.send({embed}).catch(console.error);
 
-          logChannel.bulkDelete(1, false).then(() => {
+          var logMember = message.guild.channels.find("name", config.logMember);
+          if (!logMember) return;
+
+          logMember.bulkDelete(1, false).then(() => {
               var target = message.mentions.members.first();
 
               var embed = new Discord.RichEmbed()
@@ -86,7 +88,7 @@ exports["ban"] = {
                                   "\nBanned by "+ message.author)
                   .setTimestamp()
 
-              logChannel.send({embed}).catch(console.error);
+              logMember.send({embed}).catch(console.error);
             });
         });
     }
@@ -114,10 +116,10 @@ exports["cleanban"] = {
         target.ban(1).then((target) => {
           message.channel.send(target +" has been banned.").then(m => m.delete(5000));
 
-          var logChannel = message.guild.channels.find("name", config.logChannelName);
-          if (!logChannel) return;
+          var logMember = message.guild.channels.find("name", config.logMember);
+          if (!logMember) return;
 
-          logChannel.bulkDelete(1, false).then(() => {
+          logMember.bulkDelete(1, false).then(() => {
               var target = message.mentions.members.first();
 
               var embed = new Discord.RichEmbed()
@@ -127,7 +129,7 @@ exports["cleanban"] = {
                                   "\nBanned by "+ message.author)
                   .setTimestamp()
 
-              logChannel.send({embed}).catch(console.error);
+              logMember.send({embed}).catch(console.error);
             });
         });
     }
@@ -183,8 +185,8 @@ exports["mute"] = {
           target.addRole(role).then((target) => {
               message.channel.send(target.user.username +" has been muted.").then(m => m.delete(5000));
 
-              var logChannel = message.guild.channels.find("name", config.logChannelName);
-              if (!logChannel) return;
+              var logMember = message.guild.channels.find("name", config.logMember);
+              if (!logMember) return;
 
               var embed = new Discord.RichEmbed()
                   .setColor(config.muteColor)
@@ -193,7 +195,7 @@ exports["mute"] = {
                                   "\nMuted by "+ message.author)
                   .setTimestamp()
 
-              logChannel.send({embed}).catch(console.error);
+              logMember.send({embed}).catch(console.error);
           });
     }
 }
@@ -231,8 +233,8 @@ exports["unmute"] = {
         target.removeRole(role).then((target) => {
             message.channel.send(target.user.username +" has been unmuted.").then(m => m.delete(5000));
 
-            var logChannel = message.guild.channels.find("name", config.logChannelName);
-            if (!logChannel) return;
+            var logMember = message.guild.channels.find("name", config.logMember);
+            if (!logMember) return;
 
             var embed = new Discord.RichEmbed()
                 .setColor(config.muteColor)
@@ -241,7 +243,7 @@ exports["unmute"] = {
                                 "\nUnmuted by "+ message.author)
                 .setTimestamp()
 
-            logChannel.send({embed}).catch(console.error);
+            logMember.send({embed}).catch(console.error);
         });
     }
 }
